@@ -4,6 +4,16 @@ using namespace std;
 typedef struct node {
     int nu;
     node* next = NULL;
+
+    /*
+    ~node()
+    {
+        if(next)
+        {
+            delete next;
+            next = NULL;
+        }
+    }*/
 }*Node;
 
 typedef struct ring {
@@ -11,6 +21,26 @@ typedef struct ring {
     Node start = NULL;
     Node px = NULL;
     Node end = NULL;
+
+    /*
+    ~ring() 
+    {
+        if (start)
+        {
+            delete [] start;
+            start = NULL;
+        }
+        if (px)
+        {
+            delete [] px;
+            px = NULL;
+        }
+        if (end)
+        {
+            delete [] end;
+            end = NULL;
+        }
+    }*/
 }*Ring;
 
 bool createLT(Ring head, int len = 10);
@@ -45,6 +75,12 @@ int main()
     insertLT(head, pp);
     cout << head->length << endl;
     displayLT(head);
+
+    deleteLT(head);
+    displayLT(head);
+    deleteLT(head,4);
+    displayLT(head);
+    delete head;
 
     return 0;
 }
@@ -85,7 +121,6 @@ bool insertLT(Ring head, Node pnode, int pos)
     {
         return false;
     }
-
     if (pos == 0) 
     {
         head->end->next = pnode;
@@ -93,7 +128,6 @@ bool insertLT(Ring head, Node pnode, int pos)
         head->length++;
         return true;
     } 
-
     if (pos == 1) 
     {
         pnode->next = head->start;
@@ -101,7 +135,6 @@ bool insertLT(Ring head, Node pnode, int pos)
         head->length++;
         return true;
     }
-
     head->px = head->start;
     while (pos-- > 2) 
     {
@@ -113,6 +146,31 @@ bool insertLT(Ring head, Node pnode, int pos)
     return true;
 }
 
+bool deleteLT(Ring head, int pos)
+{
+    if (pos < 0 || pos > head->length)
+    {
+        return false;
+    }
+    if (pos == 0 || pos == 1)
+    {
+        head->px = head->start;
+        head->start = head->px->next;
+        delete head->px;
+        head->length--;
+        return true;
+    }
+    head->px = head->start;
+    while (pos-- > 2)
+    {
+        head->px = head->px->next;
+    }
+    Node tmp = head->px->next;
+    head->px->next = tmp->next;
+    delete tmp;
+
+    return true;
+}
 bool displayLT(Ring head)
 {
     if (head == NULL) 
