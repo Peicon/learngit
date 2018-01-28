@@ -1,30 +1,67 @@
 #include<iostream>
 using namespace std;
 
-struct node {
+typedef struct node {
     int nu;
     node* next = NULL;
-};
+}*Node;
 
-struct node2 {
-    int nu;
-    node2 *next1 = NULL;
-    node2 *next2 = NULL;
-};
+typedef struct ring {
+    int length = 0;
+    Node start = NULL;
+    Node px = NULL;
+    Node end = NULL;
+}*Ring;
+
+bool createLT(Ring head, int len = 10);
+bool insertLT(Ring head, int pos);
+bool deleteLT(Ring head, int pos);
+bool displayLT(Ring head);
+bool destroyLT(Ring head);
 
 int main() 
 {
-    node *head = NULL;
-    node n1, n2;
-    n1.nu = 0, n2.nu = 1;
-    head = &n1;
-    n1.next = &n2;
-
-    while (head != NULL)
+    Ring head = new ring;
+    if (createLT(head)) {
+        cout << "no problem" << endl;
+    }
+    else cout << "can't create linked table!" << endl;
+    head->px = head->start;
+    while (head->px != NULL)
     {
-        cout << head->nu << " ";
+        cout << head->px->nu << " ";
         cout << endl;
-        head = head->next;
+        head->px = head->px->next;
     }
     return 0;
+}
+
+bool createLT(Ring head, int len)
+{
+    if (len <= 0)
+    {
+        head = NULL;
+        return false;
+    }
+
+    Node phead = new node;
+    phead->nu = 0;
+    phead->next = NULL;
+    head->start = phead;
+    head->px = phead;
+    head->length++;
+
+    while (len > 1) 
+    {
+        cout << "so so" << endl;
+        Node pnode = new node; 
+        pnode->nu = 0;
+        pnode->next = NULL;
+        head->px->next = pnode;
+        head->px = pnode;
+        head->length++;
+        len--;
+    }
+
+    return true;
 }
